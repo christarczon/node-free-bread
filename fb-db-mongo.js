@@ -39,7 +39,9 @@ module.exports = function (cfg) {
     },
 
     read: function (handler, key, callback) {
-      callback(new Error('Not implemented.'));
+      var projection = handler.projections && handler.projections.read || {};
+      mongo.collection(handler.collection)
+           .findOne({ _id: new mongodb.ObjectID(key) }, projection, callback);
     },
 
     edit: function (handler, key, document, callback) {
