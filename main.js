@@ -1,6 +1,9 @@
-﻿var bread = require('./free-bread');
-
-bread.init({
+﻿require('./free-bread')({
+  port: 80,
+  public: true,
+  db: require('./fb-db-mongo')({
+    database: 'test'
+  }),
   handlers: {
     users: {
       collection: 'users', // default
