@@ -1,4 +1,3 @@
-//require('node-extjs');
 var http = require('http');
 var url = require('url');
 
@@ -27,6 +26,7 @@ function notAllowed (res) {
 
 module.exports = function (cfg) {
   var db = cfg.db;
+  var validate = cfg.validator;
   db.connect(function (err) {
     if (err) {
       console.dir(err);
@@ -120,10 +120,17 @@ module.exports = function (cfg) {
               return;
             }
 
-            db.add(handler, json, handleErr(res, function (docs) {
-              res.writeHead(201);
-              res.end(JSON.stringify(docs));
-            }));
+            var validationResult = validate(json, handler.model);
+            if (validationResult !== true) {
+              res.writeHead(400);
+              res.end(JSON.stringify(validationResult))
+            }
+            else {
+              db.add(handler, json, handleErr(res, function (docs) {
+                res.writeHead(201);
+                res.end(JSON.stringify(docs));
+              }));
+            }
           });
         }
       }

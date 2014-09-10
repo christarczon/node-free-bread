@@ -4,6 +4,9 @@
   db: require('./fb-db-mongo')({
     database: 'test'
   }),
+  validator: require('./fb-v-extjs')({
+    modelDir: './models'
+  }),
   handlers: {
     users: {
       collection: 'users', // default
@@ -16,7 +19,7 @@
         }
       },
       // singleProjection optional
-      model: 'Pricer.model.User',
+      model: 'User',
       restful: 'bread', // or true
       key: '_id'
     },
